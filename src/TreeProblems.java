@@ -1,5 +1,9 @@
+import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Queue;
+import java.util.Set;
 
 public class TreeProblems {
 
@@ -89,7 +93,25 @@ public class TreeProblems {
    A null tree should return 0
   */
   public static int sumTree(Node<Integer> root) {
-    return -1;
+    if(root == null) return 0;
+    
+    Queue<Node<Integer>> queue = new LinkedList<>();
+    queue.offer(root);
+    int sum = 0;
+
+    while(!queue.isEmpty()){
+      Node<Integer> current = queue.poll();
+      sum += current.value;
+
+      if(current.children != null){
+        for(Node<Integer> child : current.children){
+          queue.offer(child);
+        }
+      }
+    }
+
+    return sum;
+
   }
 
   /*
@@ -112,7 +134,15 @@ public class TreeProblems {
    Hint: There's a simple way to do this!
   */
   public static int sumTree(Map<Integer, List<Integer>> tree) {
-    return -1;
+    if(tree == null) return 0;
+
+    Set<Integer> kSet = tree.keySet();
+    int sum = 0;
+
+    for (int key : kSet) {
+      sum += key;
+    }
+    return sum;
   }
 
   /*
@@ -135,6 +165,18 @@ public class TreeProblems {
    Hint: No recursion needed! Think about how you would do this by hand.
   */
   public static <T> T findRoot(Map<T, List<T>> tree) {
+    Set<T> children = new HashSet<>();
+
+    for(List<T> childList: tree.values()){
+      children.addAll(childList);
+    }
+
+    for(T parent: tree.keySet()){
+      if(!children.contains(parent)){
+        return parent;
+      }
+    }
+
     return null;
   }
 
